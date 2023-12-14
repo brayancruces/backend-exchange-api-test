@@ -8,12 +8,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly authService: AuthService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: 'your-secret-key', // Cambia con tu propia clave secreta
+      secretOrKey: 'S3CR3T0', 
     });
   }
 
   async validate(payload: any) {
-    // Implementa la validación del usuario si es necesario
     return { userId: payload.sub, username: payload.username };
   }
 }
