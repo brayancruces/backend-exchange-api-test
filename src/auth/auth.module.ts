@@ -1,20 +1,22 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
-import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './auth.service';
-import { JwtStrategy } from './jwt.strategy';
 import { AuthController } from './auth.controller';
+import { UsersModule } from 'src/users/users.module';
+import { RedisModule } from 'src/infraestructure/redis/redis.module';
 
 @Module({
     imports: [
-      PassportModule.register({ defaultStrategy: 'jwt' }),
-      JwtModule.register({
-        secret: 'S3CR3T0', 
-        signOptions: { expiresIn: '1h' },
-      }),
+        JwtModule.register({
+            global: true,
+            secret:  'S3CR3TK3Y',
+            signOptions: { expiresIn: '1h' },
+          }),
+          UsersModule,
+          RedisModule,
     ],
-    providers: [AuthService, JwtStrategy],
-    exports: [PassportModule, AuthService],
+    providers: [AuthService],
+    exports: [AuthService],
     controllers: [AuthController],
   })
   export class AuthModule {}
