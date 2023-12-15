@@ -35,13 +35,12 @@ $ npm run start:prod
 
 REST API: 
 
-<https://backend-test-exchange-api.onrender.com/>
+[https://backend-test-exchange-api.onrender.com/api](https://backend-test-exchange-api.onrender.com/api)
 
 
 Swagger Docs:
 
-<https://backend-test-exchange-api.onrender.com/docs>
-
+[https://backend-test-exchange-api.onrender.com/docs](https://backend-test-exchange-api.onrender.com/docs)
 
 
 ## Postman 
