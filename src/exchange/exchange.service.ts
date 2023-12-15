@@ -55,10 +55,10 @@ export class ExchangeService implements OnModuleInit {
 
     return {
       original_amount: amount,
-      result_amount: resultAmount.toFixed(4),
+      result_amount: Number(resultAmount.toFixed(2)),
       from: fromCurrency,
       to: toCurrency,
-      rate: rate.toFixed(4),
+      rate:Number(rate.toFixed(4)),
     };
   }
 }

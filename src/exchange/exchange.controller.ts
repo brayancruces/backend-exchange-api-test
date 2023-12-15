@@ -27,9 +27,9 @@ export class ExchangeController {
         try {
         const { rate } = dto;
         await this.exchangeService.setExchangeRate( params.currency, rate);
-        res.send({ message: `Tipo de cambio actualizado` });
+        res.send({ message: `Tipo de cambio actualizado`, status: true });
         } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(400).json({ error: error.message, status: false });
         }
     }
 
