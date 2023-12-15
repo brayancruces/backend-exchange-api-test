@@ -1,8 +1,9 @@
-import { Body, Controller, Param, Post, Put, Res } from '@nestjs/common';
+import { Body, Controller, Param, Post, Put, Res, UseGuards } from '@nestjs/common';
 import { RequestExchangeDto } from './dto/request-exchange.dto';
 import { ExchangeService } from './exchange.service';
 import { UpdateExchangeDto } from './dto/update-exchange.dto';
 import { Response } from 'express';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('exchange')
 export class ExchangeController {
@@ -10,6 +11,7 @@ export class ExchangeController {
     constructor(private readonly exchangeService: ExchangeService) {}
 
     @Post('calculate')
+    @UseGuards(AuthGuard)
     async calculateExchange(@Body() dto: RequestExchangeDto): Promise<any> {
       try {
         const result = await this.exchangeService.calculateExchange(dto);

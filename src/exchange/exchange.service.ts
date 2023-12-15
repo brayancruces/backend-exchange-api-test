@@ -26,7 +26,8 @@ export class ExchangeService implements OnModuleInit {
   }
 
   async getExchangeRate(fromCurrency: string, toCurrency: string): Promise<number> {
-    const rateFrom = await this.redisClient.get(`${fromCurrency}`);
+    const rateFrom = await this.redisClient.get(`${fromCurrency}`); 
+    console.log(rateFrom)
     const rateTo = await this.redisClient.get(`${toCurrency}`);
     return rateFrom &&  rateTo ? parseFloat(rateTo)/parseFloat(rateFrom) : null;
   }
@@ -38,13 +39,11 @@ export class ExchangeService implements OnModuleInit {
 
   async calculateExchange(dto: RequestExchangeDto): Promise<any> { 
 
-    console.log(dto) 
     
     const fromCurrency = dto.from;
     const toCurrency = dto.to;
     const amount = dto.amount; 
 
-    console.log(fromCurrency)
 
     const rate = await this.getExchangeRate(fromCurrency, toCurrency);
 

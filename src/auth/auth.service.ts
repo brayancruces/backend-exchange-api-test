@@ -1,23 +1,43 @@
-// src/auth/auth.service.ts
-import { Injectable } from '@nestjs/common';
-import  Redis from 'ioredis';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { UsersService } from '../users/users.service';
+import * as bcrypt from 'bcrypt';
+import { RedisService } from 'src/infraestructure/redis/redis.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  private readonly redisClient: Redis;
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly redisService: RedisService,
+    private jwtService: JwtService,
+  ) {}
 
-  constructor() {
-    this.redisClient = new Redis({
-      host: 'redis-11353.c322.us-east-1-2.ec2.cloud.redislabs.com', 
-      port: 11353,  
-      password: 'a6LyQ9MxNzQUKP53cZkvyOidSS7ktydj'    
-    });
+  async validateUser(email: string, password: string): Promise<any> {
+    const hashedPassword = await this.redisService.getUserPassword(email);
+
+    if (hashedPassword && (await bcrypt.compare(password, hashedPassword))) {
+      const user = await this.usersService.findByEmail(email);
+      const { password, ...result } = user;
+      return result;
+    }
+
+    return null;
   }
 
-  async validateUser(email: string, password: string): Promise<boolean> {
-    const storedEmail = await this.redisClient.get('user:demo@gmail.com:email');
-    const storedPassword = await this.redisClient.get('user:demo@gmail.com:password');
+  async validateUserById(userId: string): Promise<any> {
+    const user = await this.usersService.findByEmail(userId);
 
-    return email === storedEmail && password === storedPassword;
+    if (!user) {
+      throw new UnauthorizedException('Usuario no autorizado');
+    }
+
+    return user;
+  }
+
+  async login(user: any) {
+    const payload = { sub: user.emai, email: user.email };
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
   }
 }

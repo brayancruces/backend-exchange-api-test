@@ -2,6 +2,10 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { BadRequestException, HttpStatus, Logger, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from '@nestjs/platform-fastify';
 
 async function bootstrap() {
 
@@ -9,9 +13,11 @@ async function bootstrap() {
   const logger = new Logger(context);
 
   
-  const app = await NestFactory.create(AppModule, {
-    rawBody: true,
-  });  
+
+  const app = await NestFactory.create<NestFastifyApplication>(
+    AppModule,
+    new FastifyAdapter(),
+  );
 
 
   app.useGlobalPipes(new ValidationPipe({
@@ -48,11 +54,10 @@ async function bootstrap() {
     .addTag('api')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document); 
+  SwaggerModule.setup('docs', app, document); 
 
 
 
-
-  await app.listen(parseInt(process.env.PORT)); 
+  await app.listen(parseInt(process.env.PORT), '0.0.0.0');
 }
 bootstrap();
