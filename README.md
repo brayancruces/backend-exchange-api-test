@@ -10,6 +10,7 @@ Este el Exchange API
 - Redis (para almacenamiento)
 
 
+
 ## Instalacion
 
 ```bash
@@ -28,6 +29,19 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
+
+## Deployment 
+
+
+REST API: 
+
+<https://backend-test-exchange-api.onrender.com/>
+
+
+Swagger Docs:
+
+<https://backend-test-exchange-api.onrender.com/docs>
+
 
 
 ## Postman 
